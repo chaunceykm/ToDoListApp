@@ -4,11 +4,12 @@
 // APPLICATION STATE CREATED IN THE program.js. WHENEVER YOUR CODE NEEDS
 // TO INTERACT WITH THE STATE IN ONE OF THE FOLLOWING CLASSES, DO IT
 // THROUGH THE this.state INSTANCE VARIABLE.
-const fs = require('fs');
+
 class ManageTasksScreen {
   constructor(rl, state) {
     this.rl = rl;
     this.state = state;
+    this.index = 0;
   }
 
   printUi() {
@@ -18,19 +19,28 @@ class ManageTasksScreen {
     console.log("********************************************");
     console.log();
 
-    // TODO: Print the incomplete to-do items in the format as
-    //       shown in the requirements, 1-based list.
+    let numberOfRows = process.stdout.rows - 10;
+    for (let i = this.index; i < this.state.getItemCount(); i += 1) {
+      if (this.state.getItemIsIncomplete(i)) {
+        numberOfRows -= 1;
+        console.log(`${i}. ${this.state.getItemListText(i)}`);
+      }
+      if (numberOfRows <= 0) {
+        break;
+      }
+    }
 
     console.log();
     console.log("A. Add a new item");
     console.log("X. Return to main menu");
+    console.log("C. Continue");
     console.log();
   }
 
   show() {
     this.printUi();
     this.rl.question("> ", answer => {
-      const index = Number.parseInt(answer) - 1;
+      const index = Number.parseInt(answer);
       let screen = this;
       if (answer === "A") {
         screen = new AddItemScreen(this.rl, this.state);
