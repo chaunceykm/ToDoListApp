@@ -12,13 +12,15 @@ class EditCategoryScreen {
     this.categoryIndex = categoryIndex;
   }
 
-  printUi(categoryName) {
+  printUi() {
+    const category = this.state.getCategoryByIndex(this.categoryIndex);
+
     console.clear();
     console.log("********************************************");
     console.log("* EDIT CATEGORY                 (c) 1987   *");
     console.log("********************************************");
     console.log();
-    console.log(`You are editing \"${categoryName}\".`);
+    console.log(`You are editing \"${category}\".`);
     console.log();
     console.log("What would you like to rename it? Hit");
     console.log("\"Enter\" when you are done.");
@@ -26,18 +28,10 @@ class EditCategoryScreen {
   }
 
   show() {
-    // TODO: Use the value this.categoryIndex to get the
-    //       name of the category and set the following
-    //       value to the category name
-    const categoryName = "";
-
-    this.printUi(categoryName);
-    this.rl.question("> ", newCategoryName => {
-      // TODO: Update the category with the index stored
-      //       in the variable this.categoryIndex with the
-      //       value in the newCategoryName variable.
-      // TODO: Save the state
-
+    this.printUi();
+    this.rl.question("> ", answer => {
+      this.state.setCategory(this.categoryIndex, answer);
+      this.state.save();
       new ManageCategoriesScreen(this.rl, this.state).show();
     });
   }

@@ -4,7 +4,7 @@
 // APPLICATION STATE CREATED IN THE program.js. WHENEVER YOUR CODE NEEDS
 // TO INTERACT WITH THE STATE IN ONE OF THE FOLLOWING CLASSES, DO IT
 // THROUGH THE this.state INSTANCE VARIABLE.
-
+const fs = require('fs');
 class AddItemScreen {
   constructor(rl, state) {
     this.rl = rl;
