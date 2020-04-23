@@ -4,7 +4,7 @@
 // APPLICATION STATE CREATED IN THE program.js. WHENEVER YOUR CODE NEEDS
 // TO INTERACT WITH THE STATE IN ONE OF THE FOLLOWING CLASSES, DO IT
 // THROUGH THE this.state INSTANCE VARIABLE.
-const fs = require('fs');
+
 class AddItemScreen {
   constructor(rl, state) {
     this.rl = rl;
@@ -60,21 +60,20 @@ class AddItemScreen {
     console.log();
     console.log("What is the category?");
     console.log();
-
-    // TODO: Print all five category names with a one-based index
-    //       like in the screen mockup in the project description.
-
+    for (let i = 0; i < this.state.getCategoryCount(); i += 1) {
+      console.log(`${i + 1}. ${this.state.getCategoryByIndex(i)}`);
+    }
     console.log();
   }
 
-  printTaskUi3(title, categoryName) {
+  printTaskUi3(title, categoryIndex) {
     console.clear();
     console.log("********************************************");
     console.log("* CREATE A TASK                 (c) 1987   *");
     console.log("********************************************");
     console.log();
     console.log(`TITLE: ${title}`);
-    console.log(`CATEGORY: ${categoryName}`);
+    console.log(`CATEGORY: ${this.state.getCategoryByIndex(categoryIndex)}`);
     console.log();
     console.log("(Type your text and hit \"Enter\" to return to");
     console.log("the to-do list screen, 300 characters max.)");
@@ -88,11 +87,9 @@ class AddItemScreen {
     this.rl.question("> ", answer => {
       if (answer === "1") {
         this.printNoteUi();
-        this.rl.question("> ", note => {
-          // TODO: Add a note to-do item to your state
-          //       using the variable note
-          // TODO: Save the state
-
+        this.rl.question("> ", answer => {
+          this.state.addNote(answer);
+          this.state.save();
           const screen = new ManageTasksScreen(this.rl, this.state);
           screen.show();
         });
@@ -102,18 +99,10 @@ class AddItemScreen {
           this.printTaskUi2(title);
           this.rl.question("> ", categoryIndex => {
             categoryIndex = Number.parseInt(categoryIndex) - 1;
-            // TODO: Use the value categoryIndex to get the
-            //       name of the category and set the following
-            //       value to the category name
-            const categoryName = "";
-
-            this.printTaskUi3(title, categoryName);
+            this.printTaskUi3(title, categoryIndex);
             this.rl.question("> ", description => {
-              // TODO: Add a task to-do item to your state
-              //       using the variables title, categoryIndex,
-              //       and description
-              // TODO: Save the state
-
+              this.state.addTask(title, description, categoryIndex);
+              this.state.save();
               const screen = new ManageTasksScreen(this.rl, this.state);
               screen.show();
             });
